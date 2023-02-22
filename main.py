@@ -1,43 +1,48 @@
+# Karl Paju IS22
+
+# importime vajalikud packaged
+
 import random
 
 import pygame
 
 # Define game constants
-WINDOW_WIDTH = 640
-WINDOW_HEIGHT = 480
-CAR_WIDTH = 40
-CAR_HEIGHT = 80
+WINDOW_WIDTH = 640  # ekraani laius
+WINDOW_HEIGHT = 480  # ekraani pikkus
+CAR_WIDTH = 40  # auto laius
+CAR_HEIGHT = 80  # auto pikkus
 
 # Initialize Pygame
 pygame.init()
 
-# Load game images
-background_image = pygame.image.load('bg_rally.jpg')
-player_car_image = pygame.image.load('f1_red.png')
-blue_car_image = pygame.image.load('f1_blue.png')
+# Defineerime pildid
+background_image = pygame.image.load('bg_rally.jpg')  # anname background_image muutujale väärtuse
+player_car_image = pygame.image.load('f1_red.png')  # anname player_car_image muutujale väärtuse
+blue_car_image = pygame.image.load('f1_blue.png')  # anname blue_car_image muutujale väärtuse
 
-# Set up the game window
-window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption("Car Game")
+# Seadistame ekraani
+window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))  # Ekraani parameetrid
+pygame.display.set_caption("Car Game")  # ekraani pealkiri
 
-# Set up the clock
+# Seadistame kella ehk siis kaadrisageduse
 clock = pygame.time.Clock()
 
-# Set up the starting score
-score = 0
-font = pygame.font.SysFont(None, 30)
+# Loome skoori
+score = 0  # alg skoor
+font = pygame.font.SysFont(None, 30)  # Teksti suuruse ning fondi lisamine mängu
 
-# Create the player's car
-player_car_rect = player_car_image.get_rect(center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 100))
+# Loome mängija auto
+player_car_rect = player_car_image.get_rect(
+    center=(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 100))  # Loome punase auto ning määrame selle ekraani keskele.
 
-# Create a list to hold the blue cars
+# Loome listi, mille sees on sinised autod
 blue_cars = []
 for i in range(5):
     blue_car_rect = blue_car_image.get_rect(
         center=(random.randint(0, WINDOW_WIDTH - CAR_WIDTH), random.randint(-WINDOW_HEIGHT, 0)))
     blue_cars.append(blue_car_rect)
 
-# Main game loop
+# peamine loop mängu jaoks
 running = True
 while running:
     # Handle events
@@ -45,14 +50,15 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    # Move the player's car
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and player_car_rect.left > 0:
-        player_car_rect.move_ip(-5, 0)
-    if keys[pygame.K_RIGHT] and player_car_rect.right < WINDOW_WIDTH:
-        player_car_rect.move_ip(5, 0)
+    # Et kasutaja saaks liigutada enda autot
+    keys = pygame.key.get_pressed()  # muutujale andakse väärtus kui vajutatakse mingit nuppu
+    if keys[pygame.K_LEFT] and player_car_rect.left > 0:  # kui vajutatakse vasakut klahvi läheb auto vasakule
+        player_car_rect.move_ip(-5, 0)  # iga klahvi vajutusega liigub auto -5 võrra x teljes vasakule
+    if keys[
+        pygame.K_RIGHT] and player_car_rect.right < WINDOW_WIDTH:  # kui vajutakse paremat klahvi läheb auto paremale
+        player_car_rect.move_ip(5, 0)  # # iga klahvi vajutusega liigub auto 5 võrra x teljes paremale
 
-    # Move the blue cars and check for collisions
+    # Liigutab siniseid autosi ning kontrollib kas kasutaja auto on kokku põrganud nendega
     for i, blue_car_rect in enumerate(blue_cars):
         blue_car_rect.move_ip(0, 5)
         if blue_car_rect.bottom >= WINDOW_HEIGHT:
@@ -63,17 +69,17 @@ while running:
             running = False
         blue_cars[i] = blue_car_rect
 
-    # Draw the game
-    window.blit(background_image, (0, 0))
-    window.blit(player_car_image, player_car_rect)
+    # Joonistab mängu
+    window.blit(background_image, (0, 0))  # Määrame tausta
+    window.blit(player_car_image, player_car_rect)  # määrame
     for blue_car_rect in blue_cars:
         window.blit(blue_car_image, blue_car_rect)
-    score_text = font.render("Score: " + str(score), True, (255, 255, 255))
-    window.blit(score_text, (WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT - 30))
-    pygame.display.flip()
+    score_text = font.render("Score: " + str(score), True,
+                             (255, 255, 255))  # renderime ekraanile sisestatud parameetrid
+    window.blit(score_text, (WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT - 30))  # määrame skoori asukoha ekraanil
+    pygame.display.flip()  # uuendame ekraani
 
-    # Set the game's frame rate
-    clock.tick(60)
+    # seadistame fpsi
+    clock.tick(60)  # määrame kaadrisageduse 60-ks
 
-# Clean up the game
 pygame.quit()
