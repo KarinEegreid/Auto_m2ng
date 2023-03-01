@@ -59,22 +59,22 @@ while running:
         player_car_rect.move_ip(5, 0)  # # iga klahvi vajutusega liigub auto 5 võrra x teljes paremale
 
     # Liigutab siniseid autosi ning kontrollib kas kasutaja auto on kokku põrganud nendega
-    for i, blue_car_rect in enumerate(blue_cars):
-        blue_car_rect.move_ip(0, 5)
-        if blue_car_rect.bottom >= WINDOW_HEIGHT:
+    for i, blue_car_rect in enumerate(blue_cars): # See rida käivitab tsükli, mis läbib iga sinise auto ja selle asukoha, mida hoitakse muutujas "blue_cars". Tsükkel kasutab funktsiooni "enumerate", et saada juurdepääs nii elementide indeksitele kui ka nende väärtustele. Seega muutuja "i" sisaldab indeksit ning "blue_car_rect" sisaldab konkreetse auto asukoha koordinaate.
+        blue_car_rect.move_ip(0, 5) # liigutab sinise auto koordinaate alla poole, muutes nii selle asukohta ekraanil.
+        if blue_car_rect.bottom >= WINDOW_HEIGHT: # Järgnevad read kontrollivad, kas auto on liikunud ekraanist välja, ja kui see on juhtunud, siis genereeritakse uued juhuslikud koordinaadid auto ümberpaigutamiseks ekraani ülaosale.
             blue_car_rect.top = random.randint(-WINDOW_HEIGHT, 0)
             blue_car_rect.centerx = random.randint(0, WINDOW_WIDTH - CAR_WIDTH)
             score += 1
-        if blue_car_rect.colliderect(player_car_rect):
+        if blue_car_rect.colliderect(player_car_rect): # kontrollib, kas mängija auto (player_car_rect) ja sinine auto (blue_car_rect) ristuvad. Kui nad ristuvad, siis seatakse running muutuja väärtuseks False, mis paneb mängu lõppema.
             running = False
-        blue_cars[i] = blue_car_rect
+        blue_cars[i] = # blue_car_rect Teine tegevus rida blue_cars[i] = blue_car_rect määrab sinise auto (blue_car_rect) koordinaadid siniste autode listis (blue_cars) asukohaga i.
 
     # Joonistab mängu
     window.blit(background_image, (0, 0))  # Määrame tausta
-    window.blit(player_car_image, player_car_rect)  # määrame
-    for blue_car_rect in blue_cars:
-        window.blit(blue_car_image, blue_car_rect)
-    score_text = font.render("Score: " + str(score), True,
+    window.blit(player_car_image, player_car_rect)  # määrame punase auto asukoha
+    for blue_car_rect in blue_cars: # käivitab tsükli kõikide siniste autode listi 
+        window.blit(blue_car_image, blue_car_rect) # kuvab aknasse (window.blit()) sinise auto pildi (blue_car_image) antud koordinaatidega (blue_car_rect). See kuvab kõik sinised autod ekraanile.
+    score_text = font.render("Score: " + str(score), True, #  loob tekstiobjekti (font.render()) skoori näitamiseks.
                              (255, 255, 255))  # renderime ekraanile sisestatud parameetrid
     window.blit(score_text, (WINDOW_WIDTH / 2 - 50, WINDOW_HEIGHT - 30))  # määrame skoori asukoha ekraanil
     pygame.display.flip()  # uuendame ekraani
